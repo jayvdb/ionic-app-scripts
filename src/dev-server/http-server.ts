@@ -47,6 +47,8 @@ export function createHttpServer(config: ServeConfig): express.Application {
     setupProxies(app);
   }
 
+  app.get('*', serveIndex);
+
   return app;
 }
 
