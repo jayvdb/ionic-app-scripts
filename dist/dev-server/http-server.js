@@ -69,7 +69,7 @@ function createHttpServer(config) {
     if (config.useProxy) {
         setupProxies(app);
     }
-    app.get('*', serveIndex);
+    app.get('/', serveIndex);
     return app;
 }
 exports.createHttpServer = createHttpServer;
