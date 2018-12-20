@@ -47,7 +47,7 @@ export function createHttpServer(config: ServeConfig): express.Application {
     setupProxies(app);
   }
 
-  app.get('*', serveIndex);
+  app.get('/', serveIndex);
 
   return app;
 }
@@ -127,8 +127,8 @@ async function servePlatformResource(req: express.Request, res: express.Response
 }
 
 /**
- * Determines the appropriate resource path, and checks if the specified url 
- * 
+ * Determines the appropriate resource path, and checks if the specified url
+ *
  * @returns string of the resource path or undefined if there is no match
  */
 async function getResourcePath(url: string, config: ServeConfig, userAgent: string): Promise<string> {
