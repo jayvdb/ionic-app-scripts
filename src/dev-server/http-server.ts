@@ -44,17 +44,17 @@ export function createHttpServer(config: ServeConfig): express.Application {
   app.get('/plugins/*', servePlatformResource);
 
   if (config.useProxy) {
-    setupProxies(app);
+    setupProxies(app).then(() => app.get('*', serveIndex));
+  } else {
+    app.get('*', serveIndex);
   }
-
-  app.get('*', serveIndex);
 
   return app;
 }
 
 function setupProxies(app: express.Application) {
   if (getBooleanPropertyValue(Constants.ENV_READ_CONFIG_JSON)) {
-    getProjectJson().then(function (projectConfig: IonicProject) {
+    return getProjectJson().then(function (projectConfig: IonicProject) {
       for (const proxy of projectConfig.proxies || []) {
         let opts: any = url.parse(proxy.proxyUrl);
         if (proxy.proxyNoAgent) {
