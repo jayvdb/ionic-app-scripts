@@ -67,15 +67,17 @@ function createHttpServer(config) {
     app.get('/cordova_plugins.js', servePlatformResource);
     app.get('/plugins/*', servePlatformResource);
     if (config.useProxy) {
-        setupProxies(app);
+        setupProxies(app).then(function () { return app.get('*', serveIndex); });
     }
-    app.get('*', serveIndex);
+    else {
+        app.get('*', serveIndex);
+    }
     return app;
 }
 exports.createHttpServer = createHttpServer;
 function setupProxies(app) {
     if (helpers_1.getBooleanPropertyValue(Constants.ENV_READ_CONFIG_JSON)) {
-        ionic_project_1.getProjectJson().then(function (projectConfig) {
+        return ionic_project_1.getProjectJson().then(function (projectConfig) {
             for (var _i = 0, _a = projectConfig.proxies || []; _i < _a.length; _i++) {
                 var proxy = _a[_i];
                 var opts = url.parse(proxy.proxyUrl);
